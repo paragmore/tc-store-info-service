@@ -10,6 +10,6 @@ export default async (app: FastifyInstance) => {
   ApiHelper.get<{}, {}, {}>(
     app,
     "/",
-    storeInfoController.storeInfoController.bind(storeInfoController)
+    storeInfoController.createAndOnboardStore.bind(storeInfoController)
   );
 };

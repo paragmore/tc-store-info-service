@@ -9,7 +9,7 @@ import {
 @injectable()
 export class StoreInfoController {
   constructor(@inject(StoreInfoService) private storeInfoService: StoreInfoService) {}
-  storeInfoController: ApiHelperHandler<{}, {}, {}, {}, IReply> =
+  createAndOnboardStore: ApiHelperHandler<{}, {}, {}, {}, IReply> =
     async (request, reply) => {
       return ApiHelper.success(reply, {hello: 'world'})
     };
