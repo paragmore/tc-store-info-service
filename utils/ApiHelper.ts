@@ -7,6 +7,7 @@ import {
   FastifyTypeProviderDefault,
   RawServerDefault,
   RouteHandlerMethod,
+  RouteShorthandOptions,
 } from "fastify";
 import { IncomingMessage, ServerResponse } from "http";
 
@@ -62,20 +63,52 @@ export class ApiHelper {
     app: FastifyInstance,
     url: string,
     handler: ApiHelperHandler<Body, Querystring, Headers, Params, IReply>,
-    options?: any
+    options?: RouteShorthandOptions<
+      RawServerDefault,
+      IncomingMessage,
+      ServerResponse<IncomingMessage>,
+      {
+        Querystring: Querystring;
+        Headers: Headers;
+        Params: Params;
+        Reply: IReply;
+      },
+      unknown,
+      FastifySchema,
+      FastifyTypeProviderDefault,
+      FastifyBaseLogger
+    >
   ) {
     app.get<{
       Querystring: Querystring;
       Headers: Headers;
       Params: Params;
       Reply: IReply;
-    }>(url, {}, handler);
+    }>(url, { ...options }, handler);
   }
 
   static post<Body, Querystring, Params, Headers>(
     app: FastifyInstance,
     url: string,
-    handler: ApiHelperHandler<Body, Querystring, Headers, Params, IReply>
+    handler: ApiHelperHandler<Body, Querystring, Headers, Params, IReply>,
+    options?:
+      | RouteShorthandOptions<
+          RawServerDefault,
+          IncomingMessage,
+          ServerResponse<IncomingMessage>,
+          {
+            Body: Body;
+            Querystring: Querystring;
+            Headers: Headers;
+            Params: Params;
+            Reply: IReply;
+          },
+          unknown,
+          FastifySchema,
+          FastifyTypeProviderDefault,
+          FastifyBaseLogger
+        >
+      | undefined
   ) {
     app.post<{
       Body: Body;
@@ -83,7 +116,7 @@ export class ApiHelper {
       Headers: Headers;
       Params: Params;
       Reply: IReply;
-    }>(url, {}, handler);
+    }>(url, { ...options }, handler);
   }
 
   static put<Body, Querystring, Params, Headers>(

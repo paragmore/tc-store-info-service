@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export enum BusinessAdminRolesEnum {
-  ADMIN = "ADMIN",
-  MANAGER = "MANAGER",
-}
-const businessAdminSchema = new Schema(
+const storeSchema = new Schema(
   {
     name: {
       type: String,
@@ -34,7 +30,4 @@ const businessAdminSchema = new Schema(
   { timestamps: true }
 );
 
-export const BusinessAdminModel = mongoose.model(
-  "BusinessAdmin",
-  businessAdminSchema
-);
+export const StoreModel = mongoose.model("Store", storeSchema);
