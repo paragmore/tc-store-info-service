@@ -4,7 +4,7 @@ import { StoreInfoController } from "../controllers/storeInfo.controller";
 import container from "../inversify.config";
 import { ApiHelper } from "../utils/ApiHelper";
 import { OnboardStoreRequestI } from "../types/storeInfo.types";
-import { authenticateToken } from "../middlewares/auth.middleware";
+import { authenticateBusinessAdminToken, authenticateToken } from "../middlewares/auth.middleware";
 
 export default async (app: FastifyInstance) => {
   const storeInfoController = container.resolve<StoreInfoController>(StoreInfoController)
@@ -13,6 +13,6 @@ export default async (app: FastifyInstance) => {
     app,
     "/onboardStore",
     storeInfoController.onboardStore.bind(storeInfoController),
-    {preHandler:[authenticateToken]}
+    {preHandler:[authenticateBusinessAdminToken]}
   );
 };
