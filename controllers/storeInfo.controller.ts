@@ -12,11 +12,26 @@ export class StoreInfoController {
     async (request, reply) => {
       const { body } = request;
       //@ts-ignore
-      console.log('geee',request?.user)
+      console.log("geee", request?.user);
       if (!body || !body.storeId || !body.name) {
         return ApiHelper.missingParameters(reply);
       }
-      this.storeInfoService.onboardStore(body);
-      return ApiHelper.success(reply, { hello: "world" });
+      const onboardedStore = await this.storeInfoService.onboardStore(body);
+      return ApiHelper.success(reply, onboardedStore);
     };
+
+  getUserAndStoresInfo: ApiHelperHandler<{}, {}, {}, {}, IReply> = async (
+    request,
+    reply
+  ) => {
+    //@ts-ignore
+    const { user } = request;
+    if (!user) {
+      return ApiHelper.missingParameters(reply);
+    }
+    const userAndStoresInfo = await this.storeInfoService.getUserAndStoresInfo(
+      user
+    );
+    return ApiHelper.success(reply, userAndStoresInfo);
+  };
 }

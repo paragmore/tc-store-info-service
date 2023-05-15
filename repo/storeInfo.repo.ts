@@ -1,6 +1,8 @@
 import { injectable } from "inversify";
+import { Types } from "mongoose";
+import { BusinessAdminModel } from "../models/business.admin.model";
 import { StoreModel } from "../models/store.model";
-import { OnboardStoreRequestI } from "../types/storeInfo.types";
+import { OnboardStoreRequestI, StoreI } from "../types/storeInfo.types";
 
 @injectable()
 export class StoreInfoRepo {
@@ -31,6 +33,25 @@ export class StoreInfoRepo {
         plan,
       }
     );
-    return updatedStore
+    return updatedStore;
+  }
+
+  async getUserAndStoresInfoByUserId(userId: string) {
+    console.log("userId", userId);
+    const businessAdmin = await BusinessAdminModel.findById(userId);
+    const storesPromises = businessAdmin?.stores.map(async (store) => {
+      const storeInfo = await this.getStoreInfoByStoreId(store.storeId);
+      return { ...storeInfo?.toObject(), role: store.role };
+    });
+    if (!storesPromises) {
+      return businessAdmin;
+    }
+    const storesInfo = await Promise.all(storesPromises);
+    return { ...businessAdmin?.toObject(), stores: storesInfo };
+  }
+
+  async getStoreInfoByStoreId(storeId: Types.ObjectId | undefined) {
+    const storeInfo = await StoreModel.findById(storeId);
+    return storeInfo;
   }
 }
