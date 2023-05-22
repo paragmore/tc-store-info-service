@@ -1,5 +1,9 @@
 import { USER_TYPE } from "../middlewares/auth.middleware";
 
+export interface VerifyStoreGSTRequestParamsI {
+  gstin: string;
+  storeId: string;
+}
 export interface OnboardStoreRequestI {
   name: string;
   logoUrl?: string;
@@ -10,6 +14,53 @@ export interface OnboardStoreRequestI {
   onlineStoreLive?: boolean;
   plan?: string;
   storeId: string;
+}
+
+export interface GSTINResponseData {
+  ntcrbs: string;
+  adhrVFlag: string;
+  lgnm: string;
+  stj:string;
+  dty: string;
+  cxdt: string;
+  gstin: string;
+  nba: string[];
+  ekycVFlag: string;
+  cmpRt: string;
+  rgdt: string;
+  ctb: string;
+  pradr: {
+    adr: string;
+    addr: {
+      flno: string;
+      lg: string;
+      loc: string;
+      pncd: string;
+      bnm: string;
+      city: string;
+      lt: string;
+      stcd: string;
+      bno: string;
+      dst: string;
+      st: string;
+    };
+  };
+  sts: string;
+  tradeNam: string;
+  isFieldVisitConducted: string;
+  ctj: string;
+  einvoiceStatus: string;
+  lstupdt: string;
+  adadr: [];
+  ctjCd: string;
+  errorMsg: string;
+  stjCd: string;
+}
+export interface CheckGSTINResponse {
+  flag: boolean;
+  message: string;
+  errorCode?: string;
+  data: GSTINResponseData;
 }
 
 export interface UserI {

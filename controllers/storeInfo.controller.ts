@@ -1,7 +1,15 @@
 import { inject, injectable } from "inversify";
 import { StoreInfoService } from "../service/storeInfo.service";
-import { OnboardStoreRequestI } from "../types/storeInfo.types";
-import { ApiHelper, ApiHelperHandler, IReply } from "../utils/ApiHelper";
+import {
+  OnboardStoreRequestI,
+  VerifyStoreGSTRequestParamsI,
+} from "../types/storeInfo.types";
+import {
+  ApiError,
+  ApiHelper,
+  ApiHelperHandler,
+  IReply,
+} from "../utils/ApiHelper";
 
 @injectable()
 export class StoreInfoController {
@@ -33,5 +41,23 @@ export class StoreInfoController {
       user
     );
     return ApiHelper.success(reply, userAndStoresInfo);
+  };
+
+  verifyStoreGST: ApiHelperHandler<
+    {},
+    {},
+    {},
+    VerifyStoreGSTRequestParamsI,
+    IReply
+  > = async (request, reply) => {
+    const { gstin, storeId } = request.params;
+    if (!gstin || !storeId) {
+      return ApiHelper.missingParameters(reply);
+    }
+    const response = await this.storeInfoService.verifyStoreGST(gstin);
+    if (response instanceof ApiError) {
+      return ApiHelper.callFailed(reply, response.message, response.code);
+    }
+    return ApiHelper.success(reply, response);
   };
 }

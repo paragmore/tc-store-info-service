@@ -3,7 +3,10 @@ import { FastifyInstance } from "fastify";
 import { StoreInfoController } from "../controllers/storeInfo.controller";
 import container from "../inversify.config";
 import { ApiHelper } from "../utils/ApiHelper";
-import { OnboardStoreRequestI } from "../types/storeInfo.types";
+import {
+  OnboardStoreRequestI,
+  VerifyStoreGSTRequestParamsI,
+} from "../types/storeInfo.types";
 import {
   authenticateBusinessAdminToken,
   authenticateToken,
@@ -25,5 +28,12 @@ export default async (app: FastifyInstance) => {
     "/userAndStoresInfo",
     storeInfoController.getUserAndStoresInfo.bind(storeInfoController),
     { preHandler: [authenticateBusinessAdminToken] }
+  );
+
+  ApiHelper.get<{}, VerifyStoreGSTRequestParamsI, {}>(
+    app,
+    "/verifyGSTIN/:storeId/:gstin",
+    storeInfoController.verifyStoreGST.bind(storeInfoController),
+    { preHandler: [] }
   );
 };
