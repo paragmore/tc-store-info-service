@@ -22,22 +22,22 @@ export class StoreInfoService {
       allowCreditReportAccess,
       businessDomain,
       businessType,
-      gstNumber,
       logoUrl,
       name,
       onlineStoreLive,
       plan,
+      gstInfo
     } = storeReq;
     const updatePayload = {
       storeId,
       allowCreditReportAccess,
       businessDomain,
       businessType,
-      gstNumber,
       logoUrl,
       name,
       onlineStoreLive,
       plan,
+      gstInfo
     };
 
     return await this.storeInfoRepo.updateStore(updatePayload);

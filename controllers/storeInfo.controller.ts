@@ -21,7 +21,7 @@ export class StoreInfoController {
       const { body } = request;
       //@ts-ignore
       console.log("geee", request?.user);
-      if (!body || !body.storeId || !body.name) {
+      if (!body || !body.storeId || !(body.name || body.gstInfo)) {
         return ApiHelper.missingParameters(reply);
       }
       const onboardedStore = await this.storeInfoService.onboardStore(body);

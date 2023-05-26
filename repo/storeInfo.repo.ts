@@ -14,19 +14,42 @@ export class StoreInfoRepo {
       allowCreditReportAccess,
       businessDomain,
       businessType,
-      gstNumber,
       logoUrl,
       name,
       onlineStoreLive,
       plan,
+      gstInfo
     } = body;
+    if(gstInfo){
+      console.log(gstInfo)
+      const updatedStore = await StoreModel.updateOne(
+        { _id: storeId },
+        {
+          allowCreditReportAccess,
+          businessDomain,
+          businessType: gstInfo.nba[0]?.trim(),
+          logoUrl,
+          name: gstInfo.lgnm?.trim(),
+          onlineStoreLive,
+          plan,
+          address:{
+            firstLine: gstInfo.pradr?.adr?.trim(),
+            city:gstInfo.pradr?.addr?.city?.trim(),
+            district: gstInfo.pradr?.addr?.dst?.trim(),
+            pinCode: gstInfo.pradr?.addr?.pncd?.trim(),
+            state: gstInfo.pradr?.addr?.stcd?.trim()
+          },
+          gstNumber: gstInfo.gstin?.trim()
+        }
+      );
+      return updatedStore
+    }
     const updatedStore = await StoreModel.updateOne(
-      { id: storeId },
+      { _id: storeId },
       {
         allowCreditReportAccess,
         businessDomain,
         businessType,
-        gstNumber,
         logoUrl,
         name,
         onlineStoreLive,
@@ -47,7 +70,7 @@ export class StoreInfoRepo {
       return businessAdmin;
     }
     const storesInfo = await Promise.all(storesPromises);
-    return { ...businessAdmin?.toObject(), stores: storesInfo };
+    return { ...businessAdmin?.toObject(), stores: storesInfo, defaultStoreId: storesInfo[0]._id };
   }
 
   async getStoreInfoByStoreId(storeId: Types.ObjectId | undefined) {

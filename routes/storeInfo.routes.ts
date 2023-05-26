@@ -25,7 +25,7 @@ export default async (app: FastifyInstance) => {
 
   ApiHelper.get<{}, {}, {}>(
     app,
-    "/userAndStoresInfo",
+    "/",
     storeInfoController.getUserAndStoresInfo.bind(storeInfoController),
     { preHandler: [authenticateBusinessAdminToken] }
   );
@@ -34,6 +34,6 @@ export default async (app: FastifyInstance) => {
     app,
     "/verifyGSTIN/:storeId/:gstin",
     storeInfoController.verifyStoreGST.bind(storeInfoController),
-    { preHandler: [] }
+    { preHandler: [authenticateBusinessAdminToken] }
   );
 };

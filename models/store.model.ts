@@ -1,5 +1,25 @@
 import mongoose, { Schema } from "mongoose";
 
+const addressSchema = new Schema({
+  city: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  firstLine: {
+    type: String,
+  },
+  secondLine: {
+    type: String,
+  },
+  pinCode: {
+    type: String,
+  },
+  district: {
+    type: String,
+  },
+});
 const storeSchema = new Schema(
   {
     name: {
@@ -24,6 +44,15 @@ const storeSchema = new Schema(
       type: Boolean,
     },
     plan: {
+      type: String,
+    },
+    address: {
+      type: addressSchema,
+    },
+    location: {
+      type: String,
+    },
+    companyType: {
       type: String,
     },
   },
