@@ -1,1 +1,2 @@
-export const isProd = process.env.IS_PROD === "true" ? true : false;
+export const isProd = true
+export const environment ={}
