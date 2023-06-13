@@ -55,6 +55,11 @@ const storeSchema = new Schema(
     companyType: {
       type: String,
     },
+    phoneNumber: {
+      type: String,
+      unique: true,
+      required: true,
+    },
   },
   { timestamps: true }
 );
