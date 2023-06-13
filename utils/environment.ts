@@ -1,2 +1,4 @@
 export const isProd = true
-export const environment ={}
+export const environment ={
+    dbName: 'tpc-stg'
+}
