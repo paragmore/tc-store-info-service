@@ -78,7 +78,7 @@ app.register(require("@fastify/swagger-ui"), {
 });
 app.register(Routes);
 connectMongoDB();
-app.listen(PORT, (error, address) => {
+app.listen(PORT, "0.0.0.0" , (error, address) => {
   if (error) {
     app.log.error(error);
     process.exit(1);
