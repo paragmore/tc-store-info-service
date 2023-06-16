@@ -32,7 +32,7 @@ const underPressureConfig = () => {
         host: { type: "string" },
         port: { type: "string" },
         api: { type: "string" },
-        vesrion: {type:'string'}
+        version: {type:'string'}
       },
       url: "/status", // If you also want to set a custom route path and pass options
     },
