@@ -9,7 +9,7 @@ export class StoreInfoService {
   constructor(@inject(StoreInfoRepo) private storeInfoRepo: StoreInfoRepo) {}
 
   async verifyStoreGST(gstin: string) {
-    const verifyGSTINUrl = `https://sheet.gstincheck.co.in/check/1972c16ea52250b8b25d45ec32e1d313/${gstin}`;
+    const verifyGSTINUrl = `https://sheet.gstincheck.co.in/check/47d59765d1b29b9156e77355058d2c11/${gstin}`;
     const response = await requestExecutor(verifyGSTINUrl, { method: "GET" }) as CheckGSTINResponse;
     if(!response.flag){
       return new ApiError(`${response.errorCode} ==> ${response.message}`,500)
