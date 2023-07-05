@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { StoreInfoService } from "../service/storeInfo.service";
 import {
   OnboardStoreRequestI,
+  UpdateLastInvoiceInfoRequestI,
   VerifyStoreGSTRequestParamsI,
 } from "../types/storeInfo.types";
 import {
@@ -27,6 +28,25 @@ export class StoreInfoController {
       const onboardedStore = await this.storeInfoService.onboardStore(body);
       return ApiHelper.success(reply, onboardedStore);
     };
+
+  updateLastInvoiceInfo: ApiHelperHandler<
+    UpdateLastInvoiceInfoRequestI,
+    {},
+    {},
+    {},
+    IReply
+  > = async (request, reply) => {
+    const { body } = request;
+    //@ts-ignore
+    console.log("geee", request?.user);
+    if (!body || !body.storeId) {
+      return ApiHelper.missingParameters(reply);
+    }
+    const onboardedStore = await this.storeInfoService.updateLastInvoiceInfo(
+      body
+    );
+    return ApiHelper.success(reply, onboardedStore);
+  };
 
   getUserAndStoresInfo: ApiHelperHandler<{}, {}, {}, {}, IReply> = async (
     request,
