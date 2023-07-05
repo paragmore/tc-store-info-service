@@ -2,12 +2,30 @@ import { injectable } from "inversify";
 import { Types } from "mongoose";
 import { BusinessAdminModel } from "../models/business.admin.model";
 import { StoreModel } from "../models/store.model";
-import { OnboardStoreRequestI, StoreI } from "../types/storeInfo.types";
+import {
+  OnboardStoreRequestI,
+  StoreI,
+  UpdateLastInvoiceInfoRequestI,
+} from "../types/storeInfo.types";
 
 @injectable()
 export class StoreInfoRepo {
   constructor() {}
 
+  async updateLastInvoiceInfo(req: UpdateLastInvoiceInfoRequestI) {
+    const { storeId, previousInvoiceId, sequence } = req;
+    const newInvoiceId = previousInvoiceId + 1;
+    const update: {
+      lastInvoiceInfo?: { sequence?: string; invoiceId: number };
+    } = {};
+    if (sequence) {
+      update.lastInvoiceInfo = { sequence, invoiceId: newInvoiceId };
+    } else {
+      update.lastInvoiceInfo = { invoiceId: newInvoiceId };
+    }
+
+    return await StoreModel.findOneAndUpdate({ _id: storeId }, update);
+  }
   async updateStore(body: OnboardStoreRequestI) {
     const {
       storeId,
@@ -18,10 +36,10 @@ export class StoreInfoRepo {
       name,
       onlineStoreLive,
       plan,
-      gstInfo
+      gstInfo,
     } = body;
-    if(gstInfo){
-      console.log(gstInfo)
+    if (gstInfo) {
+      console.log(gstInfo);
       const updatedStore = await StoreModel.updateOne(
         { _id: storeId },
         {
@@ -32,17 +50,17 @@ export class StoreInfoRepo {
           name: gstInfo.lgnm?.trim(),
           onlineStoreLive,
           plan,
-          address:{
+          address: {
             firstLine: gstInfo.pradr?.adr?.trim(),
-            city:gstInfo.pradr?.addr?.city?.trim(),
+            city: gstInfo.pradr?.addr?.city?.trim(),
             district: gstInfo.pradr?.addr?.dst?.trim(),
             pinCode: gstInfo.pradr?.addr?.pncd?.trim(),
-            state: gstInfo.pradr?.addr?.stcd?.trim()
+            state: gstInfo.pradr?.addr?.stcd?.trim(),
           },
-          gstNumber: gstInfo.gstin?.trim()
+          gstNumber: gstInfo.gstin?.trim(),
         }
       );
-      return updatedStore
+      return updatedStore;
     }
     const updatedStore = await StoreModel.updateOne(
       { _id: storeId },
@@ -70,7 +88,11 @@ export class StoreInfoRepo {
       return businessAdmin;
     }
     const storesInfo = await Promise.all(storesPromises);
-    return { ...businessAdmin?.toObject(), stores: storesInfo, defaultStoreId: storesInfo[0]._id };
+    return {
+      ...businessAdmin?.toObject(),
+      stores: storesInfo,
+      defaultStoreId: storesInfo[0]._id,
+    };
   }
 
   async getStoreInfoByStoreId(storeId: Types.ObjectId | undefined) {

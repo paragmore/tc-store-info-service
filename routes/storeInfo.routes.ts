@@ -5,6 +5,7 @@ import container from "../inversify.config";
 import { ApiHelper } from "../utils/ApiHelper";
 import {
   OnboardStoreRequestI,
+  UpdateLastInvoiceInfoRequestI,
   VerifyStoreGSTRequestParamsI,
 } from "../types/storeInfo.types";
 import {
@@ -35,5 +36,12 @@ export default async (app: FastifyInstance) => {
     "/verifyGSTIN/:storeId/:gstin",
     storeInfoController.verifyStoreGST.bind(storeInfoController),
     { preHandler: [authenticateBusinessAdminToken] }
+  );
+
+  ApiHelper.post<UpdateLastInvoiceInfoRequestI, {}, {}, {}>(
+    app,
+    "/updateLastInvoiceInfo",
+    storeInfoController.updateLastInvoiceInfo.bind(storeInfoController),
+    { preHandler: [] }
   );
 };

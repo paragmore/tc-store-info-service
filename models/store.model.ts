@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { type } from "os";
 
 const addressSchema = new Schema({
   city: {
@@ -20,6 +21,18 @@ const addressSchema = new Schema({
     type: String,
   },
 });
+
+export const lastInvoiceInfoSchema = new Schema({
+  sequence: {
+    type: String,
+    required: true,
+  },
+  invoiceId: {
+    type: Number,
+    required: true,
+  },
+});
+
 const storeSchema = new Schema(
   {
     name: {
@@ -59,6 +72,10 @@ const storeSchema = new Schema(
       type: String,
       unique: true,
       required: true,
+    },
+    lastInvoiceInfo: {
+      type: lastInvoiceInfoSchema,
+      default: { sequence: "#INV-", invoiceId: 0 }, // Set your desired default values
     },
   },
   { timestamps: true }

@@ -1,6 +1,11 @@
 import { inject, injectable } from "inversify";
 import { StoreInfoRepo } from "../repo/storeInfo.repo";
-import { CheckGSTINResponse, OnboardStoreRequestI, UserI } from "../types/storeInfo.types";
+import {
+  CheckGSTINResponse,
+  OnboardStoreRequestI,
+  UpdateLastInvoiceInfoRequestI,
+  UserI,
+} from "../types/storeInfo.types";
 import { requestExecutor } from "../utils/RequestExecutor";
 import { ApiError } from "../utils/ApiHelper";
 
@@ -14,7 +19,11 @@ export class StoreInfoService {
     if(!response.flag){
       return new ApiError(`${response.errorCode} ==> ${response.message}`,500)
     }
-    return response.data
+    return response.data;
+  }
+
+  async updateLastInvoiceInfo(req: UpdateLastInvoiceInfoRequestI) {
+    return this.storeInfoRepo.updateLastInvoiceInfo(req);
   }
   async onboardStore(storeReq: OnboardStoreRequestI) {
     const {
@@ -26,7 +35,7 @@ export class StoreInfoService {
       name,
       onlineStoreLive,
       plan,
-      gstInfo
+      gstInfo,
     } = storeReq;
     const updatePayload = {
       storeId,
@@ -37,7 +46,7 @@ export class StoreInfoService {
       name,
       onlineStoreLive,
       plan,
-      gstInfo
+      gstInfo,
     };
 
     return await this.storeInfoRepo.updateStore(updatePayload);

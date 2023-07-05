@@ -57,11 +57,17 @@ export interface OnboardStoreRequestI {
   plan?: string;
 }
 
+export interface UpdateLastInvoiceInfoRequestI {
+  storeId: string;
+  previousInvoiceId: number;
+  sequence?: string;
+}
+
 export interface GSTINResponseData {
   ntcrbs: string;
   adhrVFlag: string;
   lgnm: string;
-  stj:string;
+  stj: string;
   dty: string;
   cxdt: string;
   gstin: string;
