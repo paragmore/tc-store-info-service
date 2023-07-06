@@ -15,16 +15,22 @@ export class StoreInfoRepo {
   async updateLastInvoiceInfo(req: UpdateLastInvoiceInfoRequestI) {
     const { storeId, previousInvoiceId, sequence } = req;
     const newInvoiceId = previousInvoiceId + 1;
-    const update: {
-      lastInvoiceInfo?: { sequence?: string; invoiceId: number };
-    } = {};
+    const update: any = {};
     if (sequence) {
-      update.lastInvoiceInfo = { sequence, invoiceId: newInvoiceId };
-    } else {
-      update.lastInvoiceInfo = { invoiceId: newInvoiceId };
+      update.$set = { "lastInvoiceInfo.sequence": sequence };
     }
 
-    return await StoreModel.findOneAndUpdate({ _id: storeId }, update);
+    if (previousInvoiceId !== undefined) {
+      update.$set = {
+        ...update.$set,
+        "lastInvoiceInfo.invoiceId": newInvoiceId,
+      };
+    }
+
+    return await StoreModel.findOneAndUpdate({ _id: storeId }, update, {
+      new: true,
+      upsert: true,
+    });
   }
   async updateStore(body: OnboardStoreRequestI) {
     const {
