@@ -31,6 +31,18 @@ export const lastInvoiceInfoSchema = new Schema({
     type: Number,
     required: true,
   },
+  billId: {
+    type: Number,
+    required: true,
+  },
+  billSequence: {
+    type: String,
+    required: true,
+  },
+  paymentNumber: {
+    type: Number,
+    required: true,
+  },
 });
 
 const storeSchema = new Schema(
@@ -75,7 +87,13 @@ const storeSchema = new Schema(
     },
     lastInvoiceInfo: {
       type: lastInvoiceInfoSchema,
-      default: { sequence: "#INV-", invoiceId: 0 }, // Set your desired default values
+      default: {
+        sequence: "#INV-",
+        invoiceId: 0,
+        billId: 0,
+        billSequence: "#BILL-",
+        paymentNumber: 0,
+      }, // Set your desired default values
     },
   },
   { timestamps: true }
